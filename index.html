@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>New York Time Crossword Puzzles</title>
+		<link rel="stylesheet" href="style.css">
+		<meta charset="utf-8">
+	</head>
+
+	<body>
+		<div id="app">
+			<div id="wrapper">
+				<h1>NYT Crossword Puzzle</h1>
+				<h3>{{ date }}</h3>
+				<select id="years" v-model="inputYear" v-on:change="getMonths">
+					<option value="" selected>Select a year</option>
+					<option v-for="year in availableYears">{{ year }}</option>
+				</select>
+				<select id="months" v-model="inputMonth" v-on:change="getDays">
+					<option value="" selected>Select a month</option>
+					<option v-for="month in availableMonths">{{ month }}</option>
+				</select>
+				<select id="days"v-model="inputDay">
+					<option value="" selected>Select a day</option>
+					<option v-for="day in availableDays">{{ day }}</option>
+				</select>
+				<button v-on:click="updatePuzzle">Submit</button>
+				<button v-on:click="toggleAnswers" v-bind:class="{ answersOn: answers }">Toggle Answers</button>
+				<div v-for="i in rows" class="row">
+					<div v-for="n in columns" 
+						v-bind:class="{ playable: data[(n - 1) + ((i - 1) * columns)] != '.', 
+						correct: answers && display[(n - 1) + ((i - 1) * columns)] == data[(n - 1) + ((i - 1) * columns)],
+						shrink: columns > 15 }"
+						v-on:click="userInput((n - 1) + ((i - 1) * columns))">
+						<span v-if="numbers[(n - 1) + ((i - 1) * columns)] != 0">{{ numbers[(n - 1) + ((i - 1) * columns)] }}</span>
+						<p v-bind:class="{ shrink: columns > 15 }">{{ display[(n - 1) + ((i - 1) * columns)] }}</p>
+					</div>
+				</div>
+			</div>
+			<ol id="cluesAcross"><p>Across</p>
+				<li v-for="item in acrossClues">{{ item }}</li>
+			</ol>
+			<ol id="cluesDown"><p>Down</p>
+				<li v-for="item in downClues">{{ item }}</li>
+			</ol>
+		</div>
+		<!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>-->
+		<script src="vue.js"></script>
+		<script src="app.js"></script>
+	</body>
+</html>
